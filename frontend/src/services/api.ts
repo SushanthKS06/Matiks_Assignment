@@ -3,11 +3,13 @@ import { LeaderboardResponse, SearchResponse, UserWithRank, HealthResponse } fro
 const getApiBaseUrl = (): string => {
     // Check for environment variable (Expo)
     if (typeof process !== 'undefined' && process.env?.EXPO_PUBLIC_API_URL) {
-        return process.env.EXPO_PUBLIC_API_URL;
+        const url = process.env.EXPO_PUBLIC_API_URL;
+        return url.endsWith('/api') ? url : `${url}/api`;
     }
     // Check for window-based config (web)
     if (typeof window !== 'undefined' && (window as any).__API_URL__) {
-        return (window as any).__API_URL__;
+        const url = (window as any).__API_URL__;
+        return url.endsWith('/api') ? url : `${url}/api`;
     }
     // Default to localhost
     return 'http://localhost:8080/api';
