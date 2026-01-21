@@ -11,8 +11,9 @@ const getApiBaseUrl = (): string => {
         const url = (window as any).__API_URL__;
         return url.endsWith('/api') ? url : `${url}/api`;
     }
-    // Default to localhost
-    return 'http://localhost:8080/api';
+    // FALLBACK: Direct Ngrok URL for production (update this when Ngrok URL changes)
+    // TODO: Remove this hardcoded URL once Vercel env vars are working
+    return 'https://siderographic-shay-frivolously.ngrok-free.dev/api';
 };
 
 const DEFAULT_TIMEOUT = 10000; // 10 seconds
