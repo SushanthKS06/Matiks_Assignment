@@ -51,11 +51,18 @@ class ApiService {
     }
 
     private async parseResponse<T>(response: Response): Promise<T> {
+        console.log('[API] Status:', response.status);
         const contentType = response.headers.get('content-type');
+        console.log('[API] Content-Type:', contentType);
+
         if (contentType && contentType.includes('application/json')) {
-            return response.json();
+            const json = await response.json();
+            return json;
         }
+
         const text = await response.text();
+        console.log('[API] Text preview:', text.substring(0, 100));
+
         if (text.includes('<!DOCTYPE html>') || text.includes('ngrok')) {
             throw new Error('Ngrok Warning Detected. Bypass header failed.');
         }
