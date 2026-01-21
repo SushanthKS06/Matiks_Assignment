@@ -55,7 +55,13 @@ export default function App() {
       if (!append) setLoading(true);
       setError(null);
 
-      const response = await fetch(`${API_URL}/leaderboard?limit=50&offset=${newOffset}`);
+      const response = await fetch(`https://siderographic-shay-frivolously.ngrok-free.dev/api/leaderboard?limit=50&offset=${newOffset}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
       if (!response.ok) throw new Error('Failed to fetch');
 
       const data: LeaderboardResponse = await response.json();
@@ -184,7 +190,7 @@ export default function App() {
         <Text style={styles.errorTitle}>Failed to load</Text>
         <Text style={styles.errorMessage}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={() => fetchLeaderboard(0)}>
-          <Text style={styles.retryText}>RETRY V4 - MONOLITH FIX</Text>
+          <Text style={styles.retryText}>RETRY V5 - FINAL SURGICAL FIX</Text>
         </TouchableOpacity>
       </View>
     );
