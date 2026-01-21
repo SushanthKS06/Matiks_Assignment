@@ -57,7 +57,19 @@ class ApiService {
         if (!response.ok) {
             throw new Error(`Failed to fetch leaderboard: ${response.statusText}`);
         }
-        return response.json();
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            return response.json();
+        }
+        const text = await response.text();
+        if (text.includes('<!DOCTYPE html>') || text.includes('ngrok')) {
+            throw new Error('Ngrok Warning Detected. Bypass header failed.');
+        }
+        try {
+            return JSON.parse(text);
+        } catch {
+            throw new Error(`Invalid JSON: ${text.substring(0, 50)}...`);
+        }
     }
 
     async searchUsers(query: string): Promise<SearchResponse> {
