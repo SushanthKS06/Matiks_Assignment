@@ -1,28 +1,13 @@
 import { LeaderboardResponse, SearchResponse, UserWithRank, HealthResponse } from '../types';
 
-// Build-time environment variable access
-// For Expo with Metro bundler, EXPO_PUBLIC_* vars are replaced at build time
-const ENV_API_URL = process.env.EXPO_PUBLIC_API_URL;
+// HARDCODED API URL - Vercel env var injection doesn't work with Expo/Metro
+// Update this URL whenever your Ngrok tunnel changes
+const API_BASE_URL = 'https://siderographic-shay-frivolously.ngrok-free.dev/api';
 
-// Log at module load time to debug env var injection
-console.log('[API] Build-time ENV_API_URL:', ENV_API_URL);
+console.log('[API] Using hardcoded URL:', API_BASE_URL);
 
 const getApiBaseUrl = (): string => {
-    // Check build-time injected env var first
-    if (ENV_API_URL) {
-        const url = ENV_API_URL;
-        console.log('[API] Using env var URL:', url);
-        return url.endsWith('/api') ? url : `${url}/api`;
-    }
-    // Check for window-based config (web fallback)
-    if (typeof window !== 'undefined' && (window as any).__API_URL__) {
-        const url = (window as any).__API_URL__;
-        console.log('[API] Using window URL:', url);
-        return url.endsWith('/api') ? url : `${url}/api`;
-    }
-    // Default to localhost for local development
-    console.log('[API] Using localhost fallback');
-    return 'http://localhost:8080/api';
+    return API_BASE_URL;
 };
 
 const DEFAULT_TIMEOUT = 10000; // 10 seconds
