@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Leaderboard | Live Rankings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #06b6d4;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-gold: #ffd700;
+            --accent-silver: #c0c0c0;
+            --accent-bronze: #cd7f32;
+            --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            --gradient-silver: linear-gradient(135deg, #e8e8e8 0%, #a8a8a8 100%);
+            --gradient-bronze: linear-gradient(135deg, #cd7f32 0%, #8b4513 100%);
+            --shadow-glow: 0 0 40px rgba(139, 92, 246, 0.15);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 8px 48px rgba(139, 92, 246, 0.5);
+            }
+        }
+
+        .title-section h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .title-section .subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .tab-btn:not(.active) {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+        }
+
+        .tab-btn:not(.active):hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .seed-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .seed-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(16, 185, 129, 0.4);
+        }
+
+        .seed-btn:disabled {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .stat-content .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-content .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Search container */
+        .search-container {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .clear-btn {
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-btn:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 100px 1fr 120px;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-glass);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .leaderboard {
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-primary) var(--bg-secondary);
+        }
+
+        .leaderboard::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .leaderboard::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        .leaderboard::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 3px;
+        }
+
+        /* User row */
+        .user-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 120px;
+            padding: 16px 24px;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .user-row:hover {
+            background: rgba(139, 92, 246, 0.05);
+            transform: scale(1.01);
+        }
+
+        .user-row.top-3 {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.1) 0%, transparent 100%);
+        }
+
+        /* Rank badges */
+        .rank-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .rank-badge.gold {
+            background: var(--gradient-gold);
+            color: #1a1a1a;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .rank-badge.silver {
+            background: var(--gradient-silver);
+            color: #1a1a1a;
+            box-shadow: 0 4px 20px rgba(192, 192, 192, 0.3);
+            animation: float 3s ease-in-out infinite 0.2s;
+        }
+
+        .rank-badge.bronze {
+            background: var(--gradient-bronze);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(205, 127, 50, 0.3);
+            animation: float 3s ease-in-out infinite 0.4s;
+        }
+
+        .rank-badge.default {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        .crown {
+            position: absolute;
+            top: -8px;
+            font-size: 14px;
+            animation: crown-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes crown-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-5deg);
+            }
+
+            50% {
+                transform: translateY(-3px) rotate(5deg);
+            }
+        }
+
+        /* User info */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .user-details .username {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .user-details .user-id {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: 'SF Mono', monospace;
+        }
+
+        /* Rating */
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .rating-value {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .rating-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .rating-bar {
+            width: 80px;
+            height: 4px;
+            background: var(--bg-card);
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .rating-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        /* Loading states */
+        .loading,
+        .error,
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--bg-card);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-message {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Load more */
+        .load-more {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .load-more-btn {
+            padding: 14px 32px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(139, 92, 246, 0.4);
+        }
+
+        .load-more-btn:disabled {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results count */
+        .results-count {
+            padding: 12px 24px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .results-count::before {
+            content: '🎯';
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Live indicator */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent-success);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .header {
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .table-header,
+            .user-row {
+                grid-template-columns: 60px 1fr 80px;
+                padding: 12px 16px;
+            }
+
+            .rank-badge {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            .user-avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .stats-bar {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-gradient"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-top">
+                <div class="logo-section">
+                    <div class="logo-icon">🏆</div>
+                    <div class="title-section">
+                        <h1>Leaderboard</h1>
+                        <p class="subtitle">Real-time competitive rankings</p>
+                    </div>
+                </div>
+                <div class="nav-actions">
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        <span>Live</span>
+                    </div>
+                    <button class="tab-btn active" id="leaderboardTab" onclick="showLeaderboard()">
+                        🏅 Rankings
+                    </button>
+                    <button class="tab-btn" id="searchTab" onclick="showSearch()">
+                        🔍 Search
+                    </button>
+                    <button class="seed-btn" id="seedBtn" onclick="seedData()">
+                        ⚡ Seed 10K Users
+                    </button>
+                </div>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalPlayers">0</div>
+                        <div class="stat-label">Total Players</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="updatesPerSec">~100</div>
+                        <div class="stat-label">Updates/sec</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-content">
+                        <div class="stat-value">O(1)</div>
+                        <div class="stat-label">Rank Lookup</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Leaderboard View -->
+        <div id="leaderboardView">
+            <div class="table-container">
+                <div class="table-header">
+                    <div>Rank</div>
+                    <div>Player</div>
+                    <div style="text-align: right;">Rating</div>
+                </div>
+                <div class="leaderboard" id="leaderboard">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">Loading leaderboard...</div>
+                    </div>
+                </div>
+                <div class="load-more" id="loadMore">
+                    <button class="load-more-btn" onclick="loadMoreUsers()">Load More</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search View -->
+        <div id="searchView" class="hidden">
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput"
+                        placeholder="Search by username (e.g., rahul)" oninput="handleSearch()">
+                </div>
+                <button class="clear-btn" onclick="clearSearch()">✕</button>
+            </div>
+            <div class="table-container">
+                <div class="results-count hidden" id="resultsCount"></div>
+                <div class="table-header">
+                    <div>Rank</div>
+                    <div>Player</div>
+                    <div style="text-align: right;">Rating</div>
+                </div>
+                <div class="leaderboard" id="searchResults">
+                    <div class="empty">
+                        <div class="empty-icon">👤</div>
+                        <div class="empty-title">Search for a player</div>
+                        <div class="empty-message">Enter a username to find their global rank</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+        let currentOffset = 0;
+        let hasMore = true;
+        let allUsers = [];
+        let searchTimeout = null;
+
+        function getInitials(username) {
+            return username.substring(0, 2).toUpperCase();
+        }
+
+        function getRatingPercentage(rating) {
+            return ((rating - 100) / (5000 - 100)) * 100;
+        }
+
+        async function fetchLeaderboard(offset = 0, append = false) {
+            try {
+                const response = await fetch(`${API_URL}/leaderboard?limit=50&offset=${offset}`);
+                if (!response.ok) throw new Error('Failed to fetch');
+
+                const data = await response.json();
+
+                if (append) {
+                    allUsers = [...allUsers, ...data.users];
+                } else {
+                    allUsers = data.users;
+                }
+
+                hasMore = data.has_more;
+                currentOffset = offset + data.users.length;
+
+                renderLeaderboard();
+                updateStats(data.total_users);
+
+                document.getElementById('loadMore').style.display = hasMore ? 'block' : 'none';
+            } catch (error) {
+                document.getElementById('leaderboard').innerHTML = `
+                    <div class="error">
+                        <div class="empty-icon">❌</div>
+                        <div class="empty-title">Failed to load leaderboard</div>
+                        <div class="empty-message">${error.message}</div>
+                        <button class="load-more-btn" style="margin-top: 20px;" onclick="fetchLeaderboard(0)">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderLeaderboard() {
+            const html = allUsers.map((user, index) => renderUserRow(user, index)).join('');
+            document.getElementById('leaderboard').innerHTML = html || '<div class="empty"><div class="empty-icon">📭</div><div class="empty-title">No players yet</div><div class="empty-message">Click "Seed 10K Users" to get started</div></div>';
+        }
+
+        function renderUserRow(user, index) {
+            let rankBadge = '';
+            let rowClass = 'user-row';
+
+            if (user.rank === 1) {
+                rankBadge = `<div class="rank-badge gold"><span class="crown">👑</span>1</div>`;
+                rowClass += ' top-3';
+            } else if (user.rank === 2) {
+                rankBadge = `<div class="rank-badge silver">2</div>`;
+                rowClass += ' top-3';
+            } else if (user.rank === 3) {
+                rankBadge = `<div class="rank-badge bronze">3</div>`;
+                rowClass += ' top-3';
+            } else {
+                rankBadge = `<div class="rank-badge default">#${user.rank}</div>`;
+            }
+
+            const ratingPercent = getRatingPercentage(user.rating);
+
+            return `
+                <div class="${rowClass}">
+                    <div>${rankBadge}</div>
+                    <div class="user-info">
+                        <div class="user-avatar">${getInitials(user.username)}</div>
+                        <div class="user-details">
+                            <div class="username">${user.username}</div>
+                            <div class="user-id">${user.id.slice(0, 8)}...</div>
+                        </div>
+                    </div>
+                    <div class="rating-container">
+                        <div class="rating-value">${user.rating.toLocaleString()}</div>
+                        <div class="rating-bar">
+                            <div class="rating-fill" style="width: ${ratingPercent}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadMoreUsers() {
+            if (hasMore) {
+                fetchLeaderboard(currentOffset, true);
+            }
+        }
+
+        function updateStats(total) {
+            document.getElementById('totalPlayers').textContent = total.toLocaleString();
+        }
+
+        async function searchUsers(query) {
+            if (!query.trim()) {
+                document.getElementById('searchResults').innerHTML = `
+                    <div class="empty">
+                        <div class="empty-icon">👤</div>
+                        <div class="empty-title">Search for a player</div>
+                        <div class="empty-message">Enter a username to find their global rank</div>
+                    </div>
+                `;
+                document.getElementById('resultsCount').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('searchResults').innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Searching...</div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_URL}/search?q=${encodeURIComponent(query)}`);
+                if (!response.ok) throw new Error('Search failed');
+
+                const data = await response.json();
+
+                if (data.users.length === 0) {
+                    document.getElementById('searchResults').innerHTML = `
+                        <div class="empty">
+                            <div class="empty-icon">🔍</div>
+                            <div class="empty-title">No results found</div>
+                            <div class="empty-message">No players matching "${query}"</div>
+                        </div>
+                    `;
+                    document.getElementById('resultsCount').classList.add('hidden');
+                } else {
+                    const html = data.users.map((user, index) => renderUserRow(user, index)).join('');
+                    document.getElementById('searchResults').innerHTML = html;
+                    document.getElementById('resultsCount').textContent = `Found ${data.users.length} player${data.users.length !== 1 ? 's' : ''}`;
+                    document.getElementById('resultsCount').classList.remove('hidden');
+                }
+            } catch (error) {
+                document.getElementById('searchResults').innerHTML = `
+                    <div class="error">
+                        <div class="empty-icon">❌</div>
+                        <div class="empty-title">Search failed</div>
+                        <div class="empty-message">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value;
+
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+
+            searchTimeout = setTimeout(() => {
+                searchUsers(query);
+            }, 300);
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            searchUsers('');
+        }
+
+        function showLeaderboard() {
+            document.getElementById('leaderboardView').classList.remove('hidden');
+            document.getElementById('searchView').classList.add('hidden');
+            document.getElementById('leaderboardTab').classList.add('active');
+            document.getElementById('searchTab').classList.remove('active');
+        }
+
+        function showSearch() {
+            document.getElementById('leaderboardView').classList.add('hidden');
+            document.getElementById('searchView').classList.remove('hidden');
+            document.getElementById('leaderboardTab').classList.remove('active');
+            document.getElementById('searchTab').classList.add('active');
+        }
+
+        async function seedData() {
+            const btn = document.getElementById('seedBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Seeding...';
+
+            try {
+                const response = await fetch(`${API_URL}/seed`, { method: 'POST' });
+                if (!response.ok) throw new Error('Seed failed');
+
+                const data = await response.json();
+                btn.textContent = `✅ Seeded ${data.users_added.toLocaleString()}!`;
+
+                // Reload leaderboard
+                currentOffset = 0;
+                allUsers = [];
+                fetchLeaderboard(0);
+
+                setTimeout(() => {
+                    btn.textContent = '⚡ Seed 10K Users';
+                    btn.disabled = false;
+                }, 2000);
+            } catch (error) {
+                btn.textContent = '❌ Failed';
+                setTimeout(() => {
+                    btn.textContent = '⚡ Seed 10K Users';
+                    btn.disabled = false;
+                }, 2000);
+            }
+        }
+
+        // Initialize
+        fetchLeaderboard(0);
+    </script>
+</body>
+
+</html>
