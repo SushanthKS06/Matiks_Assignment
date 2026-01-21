@@ -1,7 +1,7 @@
 # Scalable Leaderboard System
 
 ## Video Walkthrough : https://drive.google.com/file/d/1achxknvqrlKhGvymlgEYxtfgwE24F9_O/view?usp=sharing
-
+## Vercel Web Link : https://matiks-assignment-owdc.vercel.app/
 A real-time, tie-aware, scalable leaderboard system built with Golang backend and Web frontend.
 
 ## Features
