@@ -1,24 +1,27 @@
 import { LeaderboardResponse, SearchResponse, UserWithRank, HealthResponse } from '../types';
 
+// Build-time environment variable access
+// For Expo with Metro bundler, EXPO_PUBLIC_* vars are replaced at build time
+const ENV_API_URL = process.env.EXPO_PUBLIC_API_URL;
+
+// Log at module load time to debug env var injection
+console.log('[API] Build-time ENV_API_URL:', ENV_API_URL);
+
 const getApiBaseUrl = (): string => {
-    // For Vite (Expo Web on Vercel) - use import.meta.env
-    // @ts-ignore - import.meta.env is Vite-specific
-    if (typeof import.meta !== 'undefined' && import.meta.env?.EXPO_PUBLIC_API_URL) {
-        // @ts-ignore
-        const url = import.meta.env.EXPO_PUBLIC_API_URL;
-        return url.endsWith('/api') ? url : `${url}/api`;
-    }
-    // For Metro (React Native mobile) - use process.env
-    if (typeof process !== 'undefined' && process.env?.EXPO_PUBLIC_API_URL) {
-        const url = process.env.EXPO_PUBLIC_API_URL;
+    // Check build-time injected env var first
+    if (ENV_API_URL) {
+        const url = ENV_API_URL;
+        console.log('[API] Using env var URL:', url);
         return url.endsWith('/api') ? url : `${url}/api`;
     }
     // Check for window-based config (web fallback)
     if (typeof window !== 'undefined' && (window as any).__API_URL__) {
         const url = (window as any).__API_URL__;
+        console.log('[API] Using window URL:', url);
         return url.endsWith('/api') ? url : `${url}/api`;
     }
     // Default to localhost for local development
+    console.log('[API] Using localhost fallback');
     return 'http://localhost:8080/api';
 };
 
