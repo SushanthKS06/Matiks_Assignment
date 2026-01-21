@@ -2,7 +2,7 @@
 
 A real-time, tie-aware, scalable leaderboard system built with Golang backend and Web frontend.
 
-## 🚀 Features
+## Features
 
 - **10,000+ Users**: Handles large-scale user data with capacity for millions
 - **O(1) Rank Computation**: Uses rating bucket index for instant rank lookups
@@ -14,7 +14,7 @@ A real-time, tie-aware, scalable leaderboard system built with Golang backend an
 - **Request Logging**: Structured request logging with timing
 - **Comprehensive Health**: Detailed stats endpoint with memory usage
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -53,7 +53,7 @@ A real-time, tie-aware, scalable leaderboard system built with Golang backend an
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 📊 Ranking Algorithm
+## Ranking Algorithm
 
 **Competition Ranking Formula**:
 ```
@@ -68,7 +68,7 @@ rank = 1 + count of users with strictly higher rating
 | 4900   | 2    |
 | 4800   | 4    |
 
-## 🛠️ Quick Start
+## Quick Start
 
 ### Prerequisites
 - Go 1.21+
@@ -109,7 +109,7 @@ npm install
 npx expo start
 ```
 
-## 📚 API Endpoints
+## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -123,7 +123,7 @@ npx expo start
 | POST | `/api/simulator/stop` | Stop score simulator |
 | GET | `/api/simulator/status` | Get simulator status |
 
-## 🧪 Testing
+## Testing
 
 ```bash
 cd backend
@@ -141,7 +141,7 @@ go test ./tests/... -v
 - Search with special characters
 - Stress testing for GetTopUsers
 
-## 📈 Performance
+## Performance
 
 | Operation | Complexity | Notes |
 |-----------|------------|-------|
@@ -151,7 +151,7 @@ go test ./tests/... -v
 | Update rating | O(Δ) | Incremental cumulative update |
 | Add user | O(log N) | Binary search insertion |
 
-## 🛡️ Production Features
+## Production Features
 
 - **Rate Limiting**: 100 requests/second per IP, burst of 200
 - **Request Logging**: Structured logs with timing
@@ -161,7 +161,7 @@ go test ./tests/... -v
 - **Input Validation**: Search query sanitization
 - **Result Limits**: Max 100 search results to prevent memory issues
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Matiks_Assignment/
@@ -185,7 +185,7 @@ Matiks_Assignment/
 └── README.md
 ```
 
-## 🔧 Configuration
+## Configuration
 
 Environment variables:
 
@@ -196,6 +196,6 @@ Environment variables:
 | `UPDATE_INTERVAL` | 100 | Simulator tick (ms) |
 | `EXPO_PUBLIC_API_URL` | localhost:8080/api | Frontend API URL |
 
-## 📄 License
+## License
 
 MIT
