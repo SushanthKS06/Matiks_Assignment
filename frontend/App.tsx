@@ -30,7 +30,9 @@ interface SearchResponse {
   count: number;
 }
 
-const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080/api';
+// HARDCODED API URL for debugging - App.tsx ignores src/services/api.ts
+const API_URL = 'https://siderographic-shay-frivolously.ngrok-free.dev/api';
+// const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080/api';
 
 type Screen = 'leaderboard' | 'search';
 
@@ -182,7 +184,7 @@ export default function App() {
         <Text style={styles.errorTitle}>Failed to load</Text>
         <Text style={styles.errorMessage}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={() => fetchLeaderboard(0)}>
-          <Text style={styles.retryText}>Try Again</Text>
+          <Text style={styles.retryText}>RETRY V4 - MONOLITH FIX</Text>
         </TouchableOpacity>
       </View>
     );
