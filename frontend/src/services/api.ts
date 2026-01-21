@@ -2,6 +2,7 @@ import { LeaderboardResponse, SearchResponse, UserWithRank, HealthResponse } fro
 
 // HARDCODED API URL - Vercel env var injection doesn't work with Expo/Metro
 // Update this URL whenever your Ngrok tunnel changes
+// BUILD TIMESTAMP: 2026-01-21T20:40:00
 const API_BASE_URL = 'https://siderographic-shay-frivolously.ngrok-free.dev/api';
 
 console.log('[API] Using hardcoded URL:', API_BASE_URL);
