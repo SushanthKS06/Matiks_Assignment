@@ -35,6 +35,9 @@ class ApiService {
                 ...options,
                 headers: {
                     ...options.headers,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'LeaderboardApp/1.0',
                     'ngrok-skip-browser-warning': 'true',
                 },
                 signal: controller.signal,
