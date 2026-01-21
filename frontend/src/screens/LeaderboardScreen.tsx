@@ -154,7 +154,7 @@ export function LeaderboardScreen({ onNavigateToSearch }: LeaderboardScreenProps
                         colors={['#8b5cf6', '#06b6d4']}
                         style={styles.retryButtonGradient}
                     >
-                        <Text style={styles.retryButtonText}>Retry (No Config)</Text>
+                        <Text style={styles.retryButtonText}>RETRY V3 - HARDCODED</Text>
                     </LinearGradient>
                 </TouchableOpacity>
             </View>
