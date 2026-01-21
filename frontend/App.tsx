@@ -95,7 +95,13 @@ export default function App() {
 
     try {
       setSearching(true);
-      const response = await fetch(`${API_URL}/search?q=${encodeURIComponent(query)}`);
+      const response = await fetch(`${API_URL}/search?q=${encodeURIComponent(query)}`, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
       if (!response.ok) throw new Error('Search failed');
 
       const data: SearchResponse = await response.json();
@@ -111,7 +117,14 @@ export default function App() {
     if (seeding) return;
     setSeeding(true);
     try {
-      const response = await fetch(`${API_URL}/seed?count=10000`, { method: 'POST' });
+      const response = await fetch(`${API_URL}/seed?count=10000`, {
+        method: 'POST',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
       if (!response.ok) throw new Error('Failed to seed users');
       const data = await response.json();
       alert(`Successfully seeded ${data.users_added.toLocaleString()} users!`);
