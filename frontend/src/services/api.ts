@@ -1,19 +1,25 @@
 import { LeaderboardResponse, SearchResponse, UserWithRank, HealthResponse } from '../types';
 
 const getApiBaseUrl = (): string => {
-    // Check for environment variable (Expo)
+    // For Vite (Expo Web on Vercel) - use import.meta.env
+    // @ts-ignore - import.meta.env is Vite-specific
+    if (typeof import.meta !== 'undefined' && import.meta.env?.EXPO_PUBLIC_API_URL) {
+        // @ts-ignore
+        const url = import.meta.env.EXPO_PUBLIC_API_URL;
+        return url.endsWith('/api') ? url : `${url}/api`;
+    }
+    // For Metro (React Native mobile) - use process.env
     if (typeof process !== 'undefined' && process.env?.EXPO_PUBLIC_API_URL) {
         const url = process.env.EXPO_PUBLIC_API_URL;
         return url.endsWith('/api') ? url : `${url}/api`;
     }
-    // Check for window-based config (web)
+    // Check for window-based config (web fallback)
     if (typeof window !== 'undefined' && (window as any).__API_URL__) {
         const url = (window as any).__API_URL__;
         return url.endsWith('/api') ? url : `${url}/api`;
     }
-    // FALLBACK: Direct Ngrok URL for production (update this when Ngrok URL changes)
-    // TODO: Remove this hardcoded URL once Vercel env vars are working
-    return 'https://siderographic-shay-frivolously.ngrok-free.dev/api';
+    // Default to localhost for local development
+    return 'http://localhost:8080/api';
 };
 
 const DEFAULT_TIMEOUT = 10000; // 10 seconds
