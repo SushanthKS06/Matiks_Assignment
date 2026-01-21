@@ -31,6 +31,10 @@ class ApiService {
         try {
             const response = await fetch(url, {
                 ...options,
+                headers: {
+                    ...options.headers,
+                    'ngrok-skip-browser-warning': 'true',
+                },
                 signal: controller.signal,
             });
             clearTimeout(timeoutId);
