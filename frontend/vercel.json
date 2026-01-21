@@ -1,9 +1,23 @@
 {
     "version": 2,
-    "rewrites": [
+    "routes": [
+        {
+            "handle": "filesystem"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/index.html"
+        }
+    ],
+    "headers": [
         {
             "source": "/(.*)",
-            "destination": "/index.html"
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "no-store, max-age=0"
+                }
+            ]
         }
     ]
 }
