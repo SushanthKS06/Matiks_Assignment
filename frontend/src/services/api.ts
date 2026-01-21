@@ -50,13 +50,7 @@ class ApiService {
         }
     }
 
-    async getLeaderboard(limit: number = 50, offset: number = 0): Promise<LeaderboardResponse> {
-        const response = await this.fetchWithTimeout(
-            `${this.baseUrl}/leaderboard?limit=${limit}&offset=${offset}`
-        );
-        if (!response.ok) {
-            throw new Error(`Failed to fetch leaderboard: ${response.statusText}`);
-        }
+    private async parseResponse<T>(response: Response): Promise<T> {
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
             return response.json();
@@ -72,6 +66,16 @@ class ApiService {
         }
     }
 
+    async getLeaderboard(limit: number = 50, offset: number = 0): Promise<LeaderboardResponse> {
+        const response = await this.fetchWithTimeout(
+            `${this.baseUrl}/leaderboard?limit=${limit}&offset=${offset}`
+        );
+        if (!response.ok) {
+            throw new Error(`Failed to fetch leaderboard: ${response.statusText}`);
+        }
+        return this.parseResponse(response);
+    }
+
     async searchUsers(query: string): Promise<SearchResponse> {
         const sanitizedQuery = encodeURIComponent(query.trim());
         const response = await this.fetchWithTimeout(
@@ -80,7 +84,7 @@ class ApiService {
         if (!response.ok) {
             throw new Error(`Failed to search users: ${response.statusText}`);
         }
-        return response.json();
+        return this.parseResponse(response);
     }
 
     async getUser(id: string): Promise<UserWithRank> {
@@ -88,7 +92,7 @@ class ApiService {
         if (!response.ok) {
             throw new Error(`Failed to get user: ${response.statusText}`);
         }
-        return response.json();
+        return this.parseResponse(response);
     }
 
     async seedUsers(count: number = 10000): Promise<{ message: string; users_added: number }> {
@@ -98,7 +102,7 @@ class ApiService {
         if (!response.ok) {
             throw new Error(`Failed to seed users: ${response.statusText}`);
         }
-        return response.json();
+        return this.parseResponse(response);
     }
 
     async getHealth(): Promise<HealthResponse> {
@@ -106,7 +110,7 @@ class ApiService {
         if (!response.ok) {
             throw new Error(`Failed to get health: ${response.statusText}`);
         }
-        return response.json();
+        return this.parseResponse(response);
     }
 
     async startSimulator(): Promise<{ message: string; running: boolean }> {
@@ -116,7 +120,7 @@ class ApiService {
         if (!response.ok) {
             throw new Error(`Failed to start simulator: ${response.statusText}`);
         }
-        return response.json();
+        return this.parseResponse(response);
     }
 
     async stopSimulator(): Promise<{ message: string; running: boolean }> {
@@ -126,7 +130,7 @@ class ApiService {
         if (!response.ok) {
             throw new Error(`Failed to stop simulator: ${response.statusText}`);
         }
-        return response.json();
+        return this.parseResponse(response);
     }
 }
 
