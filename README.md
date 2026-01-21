@@ -196,6 +196,42 @@ Environment variables:
 | `UPDATE_INTERVAL` | 100 | Simulator tick (ms) |
 | `EXPO_PUBLIC_API_URL` | localhost:8080/api | Frontend API URL |
 
+## Deployment & Troubleshooting
+
+### Vercel Deployment (Frontend)
+
+The frontend is deployed on Vercel and connects to the backend via a public **Ngrok** tunnel.
+
+**Critical Note:**
+The frontend application logic is currently contained within `frontend/App.tsx`.
+- **Source of Truth:** `frontend/App.tsx`
+- **Ignored Files:** Modular service files like `src/services/api.ts` are currently bypassed.
+
+### How to Update Ngrok URL
+
+If the Ngrok tunnel is restarted and the URL changes (e.g., `https://new-url.ngrok-free.dev`), you **MUST** update the hardcoded URL in the frontend code:
+
+1. Open `frontend/App.tsx`.
+2. Locate the `API_URL` constant near line 33.
+3. Replace the string with the new Ngrok URL (ensure it ends with `/api`).
+   ```typescript
+   const API_URL = 'https://your-new-url.ngrok-free.dev/api';
+   ```
+4. Commit and push the changes to GitHub.
+   ```bash
+   git add frontend/App.tsx
+   git commit -m "chore: update ngrok url"
+   git push origin main
+   ```
+5. Vercel will automatically redeploy the new version (approx. 2 minutes).
+
+### Ngrok Browser Warning
+To prevent Ngrok's "Visit Site" warning page from breaking the API, the frontend automatically sends the following header with every request:
+```json
+"ngrok-skip-browser-warning": "true"
+```
+Ensure this header is preserved if modifying `App.tsx`.
+
 ## License
 
 MIT
